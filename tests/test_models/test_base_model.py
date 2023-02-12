@@ -6,14 +6,62 @@ and documentation.
 
 from datetime import datetime
 import time
-from models.base_model import BaseModel
+import models.base_model
 import unittest
+import inspect
+import pep8 as pycodestyle
+module_doc = models.base_model.__doc__
+BaseModel = models.base_model.BaseModel
+
+
+class TestBaseModelDocs(unittest.TestCase):
+    """Test the documentation and style of BaseModel class."""
+
+    @classmethod
+    def setUpClass(self):
+        """Set up for docstring tests."""
+        self.base_funcs = inspect.getmembers(BaseModel, inspect.isfunction)
+
+    def test_pep8_conformance(self):
+        """Test that models/base_model.py conforms to PEP8."""
+        for path in ['models/base_model.py',
+                     'tests/test_models/test_base_model.py']:
+            with self.subTest(path=path):
+                errors = pycodestyle.Checker(path).check_all()
+                self.assertEqual(errors, 0)
+
+    def test_module_docstrings(self):
+        """Test for the existance of module docstring"""
+        self.assertIsNot(module_doc, None,
+                         "base_model.py requires docstring")
+        self.assertTrue(len(module_doc) > 1,
+                        "base_model.py requires docstring")
+
+    def test_class_docstring(self):
+        """Test for the BaseModel class docstring"""
+        self.assertIsNot(BaseModel.__doc__, None,
+                         "BaseModel class requires docstring")
+        self.assertTrue(len(BaseModel.__doc__) >= 1,
+                        "BaseModel class requires docstring")
+
+    def test_funcs_docstring(self):
+        """Test for docstrings in BaseModel methods"""
+        for func in self.base_funcs:
+            with self.subTest(func=func):
+                self.assertIsNot(
+                    func[1].__doc__, None,
+                    "{:s} method requires docstring".format(func[0])
+                    )
+                self.assertTrue(
+                        len(func[1].__doc__) > 1,
+                        "{:s} method requires docstring".format(func[0])
+                        )
 
 
 class TestBaseModel(unittest.TestCase):
     """Test BaseModel class"""
     def test_instantiation(self):
-        """Test object is correctly created"""
+        """Test object is correctly created."""
         inst = BaseModel()
         self.assertIs(type(inst), BaseModel)
         inst.name = "ALX SE"
@@ -60,8 +108,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(inst1.id, inst2.id)
 
     def test_datetime(self):
-        """Test the two BaseModel datetime instances are different
-        when BaseModel is instantiated, and at same time have the same value"""
+        """Test the two BaseModel datetime instances are different when
+        BaseModel is instantiated, and at same time have the same value"""
         time1 = datetime.now()
         inst1 = BaseModel()
         time2 = datetime.now()

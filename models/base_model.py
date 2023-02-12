@@ -5,7 +5,7 @@ Contains class BaseModel
 
 from datetime import datetime
 import uuid
-timeformat = "%Y-%m-%dT%H:%M:%S.%f"
+isof = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 class BaseModel:
@@ -17,11 +17,11 @@ class BaseModel:
                 if key != "__class__":
                     setattr(self, key, value)
             if kwargs.get("created_at", None) and type(self.created_at) is str:
-                self.created_at = datetime.strptime(kwargs["created_at"], timeformat)
+                self.created_at = datetime.strptime(kwargs["created_at"], isof)
             else:
                 self.created_at = datetime.now()
             if kwargs.get("updated_at", None) and type(self.updated_at) is str:
-                self.updated_at = datetime.strptime(kwargs["updated_at"], timeformat)
+                self.updated_at = datetime.strptime(kwargs["updated_at"], isof)
             else:
                 self.update_at = datetime.now()
         else:
@@ -50,6 +50,8 @@ class BaseModel:
 
     def __str__(self):
         """String representation of the BaseModel class."""
-        new_str = "[{:s}] ({:s}) {}".format(self.__class__.__name__,
-                                            self.id, self.__dict__)
+        new_str = "[{:s}] ({:s}) {}".format(
+                self.__class__.__name__,
+                self.id, self.__dict__
+                )
         return new_str
