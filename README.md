@@ -26,3 +26,10 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3 (version 3.
 * Access AirBnB directory: `cd AirBnB_clone`
 * Run bnb(interactively): `./console.py` and enter command
 * Run bnb(non-interactively): `echo "<command>" | ./console.py`
+
+## File Descriptions
+#### `models/` - directory contains classes used for this project:
+[base_model.py](/models/base_model.py) - The BaseModel class from which future classes will be derived
+* `def __init__(self, *args, **kwargs)` - Initialization of the basw model* `def __str__(self)` - String representation of the BaseModel class
+* `def save(self)` - Updates the attribute `updated_at` with the current datetime
+* `def to_dict(self)` - Returns a dictionary containing all keys/values of the instance
