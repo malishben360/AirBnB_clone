@@ -9,9 +9,12 @@ import time
 import models.base_model
 import unittest
 import inspect
-import pep8 as pycodestyle
+import pycodestyle
+import warnings
+warnings.filterwarnings("ignore", message="Possible nested set at position 1")
 module_doc = models.base_model.__doc__
 BaseModel = models.base_model.BaseModel
+regex = '^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$'
 
 
 class TestBaseModelDocs(unittest.TestCase):
@@ -22,8 +25,8 @@ class TestBaseModelDocs(unittest.TestCase):
         """Set up for docstring tests."""
         self.base_funcs = inspect.getmembers(BaseModel, inspect.isfunction)
 
-    def test_pep8_conformance(self):
-        """Test that models/base_model.py conforms to PEP8."""
+    def test_pycodestyle_conformance(self):
+        """Test that models/base_model.py conforms to pycodestyle."""
         for path in ['models/base_model.py',
                      'tests/test_models/test_base_model.py']:
             with self.subTest(path=path):
@@ -101,10 +104,7 @@ class TestBaseModel(unittest.TestCase):
             with self.subTest(uuid=uuid):
                 self.assertIn("id", inst.__dict__)
                 self.assertIs(type(uuid), str)
-                self.assertRegex(uuid,
-                                 '^[a-f0-9]{8}-[a-f0-9]{4}'
-                                 '-[a-f0-9]{4}-[a-f0-9]{4}'
-                                 '-[a-f0-9]{12}$')
+                self.assertRegex(uuid, regex)
         self.assertNotEqual(inst1.id, inst2.id)
 
     def test_datetime(self):
