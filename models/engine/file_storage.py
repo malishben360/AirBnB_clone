@@ -6,7 +6,8 @@ andcdeserialization.
 
 import json
 from models.base_model import BaseModel
-
+from models.user import User
+classes = {'BaseModel': BaseModel, 'User': User}
 
 class FileStorage:
     """Serializes instance to JSON file and
@@ -40,6 +41,7 @@ class FileStorage:
             with open(self.__file_path, "r") as f:
                 objects = json.load(f)
                 for key in objects.keys():
-                    self.__objects[key] = BaseModel(**objects[key])
+                    class_name = key.split(".")[0]
+                    self.__objects[key] = classes[class_name](**objects[key])
         except FileNotFoundError:
             pass

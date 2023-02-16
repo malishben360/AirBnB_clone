@@ -5,8 +5,9 @@ A module that contains the entry point of the command interpreter.
 
 import cmd
 import models
-BaseModel = models.base_model.BaseModel
-
+from models.base_model import BaseModel
+from models.user import User
+classes = {'BaseModel': BaseModel, 'User': User}
 
 class HBNBCommand(cmd.Cmd):
     """ Defines the command hooks. """
@@ -16,8 +17,8 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line):
         """Prints all string representation of all instances
         based or not on the class name.\n"""
-        arguments = line.split()
-        if len(arguments) == 0:
+        args = line.split()
+        if len(args) == 0:
             objects = models.storage.all()
             object_array = []
             if not len(objects) == 0:
@@ -27,9 +28,9 @@ class HBNBCommand(cmd.Cmd):
                 print(object_array)
             else:
                 pass
-        elif arguments[0] == 'BaseModel':
+        elif args[0] in classes:
             objects = models.storage.all()
-            class_name = arguments[0]
+            class_name = args[0]
             object_array = []
             if not len(objects) == 0:
                 for key in objects.keys():
@@ -45,17 +46,18 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_create(self, line):
-        """Creates an instance of BaseModel and save to JSON file.\n"""
-        arguments = line.split()
-        if len(arguments) > 0:
-            class_name = arguments[0]
+        """Creates an instance of a class and save to JSON file.\n"""
+        args = line.split()
+        class_name = ""
+        if len(args) > 0:
+            class_name = args[0]
         else:
             class_name = line
 
         if not class_name:
             print("** class name missing **")
-        elif class_name == "BaseModel":
-            instance = BaseModel()
+        elif class_name in classes:
+            instance = classes[class_name]()
             models.storage.save()
             print("%s" % instance.id)
         else:
@@ -86,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
                 value = args[3]
 
             objects = models.storage.all()
-            if class_name == 'BaseModel':
+            if class_name in classes:
                 inst_id = class_name + '.' + inst_id
                 if inst_id in objects:
                     setattr(objects[inst_id], attribute, value)
@@ -100,14 +102,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """Prints the string representation of an instance based
-        on call name and id\n"""
-        arguments = line.split()
+        on class name and id.\n"""
+        args = line.split()
         if not line:
             print("** class name missing **")
-        elif len(arguments) == 1:
+        elif len(args) == 1:
             print("** instance id missing **")
-        elif arguments[0] == "BaseModel":
-            inst_id = arguments[0] + "." + arguments[1]
+        elif args[0] in classes:
+            inst_id = args[0] + "." + args[1]
             objects = models.storage.all()
             if inst_id in objects:
                 print('%s' % objects[inst_id])
@@ -124,7 +126,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         elif len(args) == 1:
             print("** instance id missing **")
-        elif args[0] == 'BaseModel':
+        elif args[0] in classes:
             inst_id = args[0] + '.' + args[1]
             objects = models.storage.all()
             if inst_id in objects:
