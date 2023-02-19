@@ -184,6 +184,9 @@ class HBNBCommand(cmd.Cmd):
                             if key.startswith(class_name):
                                 count += 1
                         print(count)
+                    elif cmd.startswith('show("') and cmd.endswith('")'):
+                        instance_id = cmd[6:-2]
+                        self.do_show(class_name + ' ' + instance_id)
                     else:
                         print('*** Unknown syntax: %s' % line)
                 else:
