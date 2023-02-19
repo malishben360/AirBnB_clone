@@ -174,13 +174,20 @@ class HBNBCommand(cmd.Cmd):
             if len(class_cmd) > 1:
                 class_name = class_cmd[0]
                 cmd = class_cmd[1]
-                if cmd == "all()":
-                    if class_name in classes:
+                if class_name in classes:
+                    if cmd == "all()":
                         self.do_all(class_name)
+                    elif cmd == "count()":
+                        count = 0
+                        objects = models.storage.all()
+                        for key, value in objects.items():
+                            if key.startswith(class_name):
+                                count += 1
+                        print(count)
                     else:
-                        print("*** class doesn't exist ***")
+                        print('*** Unknown syntax: %s' % line)
                 else:
-                    print('*** Unknown syntax: %s' % line)
+                    print("*** class doesn't exist ***")
             else:
                 print('*** Unknown syntax: %s' % line)
         else:
