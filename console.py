@@ -4,6 +4,7 @@ A module that contains the entry point of the command interpreter.
 """
 
 import cmd
+import re
 import models
 from models.base_model import BaseModel
 from models.user import User
@@ -187,6 +188,12 @@ class HBNBCommand(cmd.Cmd):
                     elif cmd.startswith('show("') and cmd.endswith('")'):
                         instance_id = cmd[6:-2]
                         self.do_show(class_name + ' ' + instance_id)
+                    elif cmd.startswith('update("'):
+                        args = [i 
+                                for i in re.split(r'[.,")( ]', line)
+                                if i != '' and i != 'update']
+                        string = ' '.join(i for i in args)
+                        self.do_update(string)
                     elif cmd.startswith('destroy("') and cmd.endswith('")'):
                         instance_id = cmd[9:-2]
                         self.do_destroy(class_name + ' ' + instance_id)
