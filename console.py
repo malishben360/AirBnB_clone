@@ -187,6 +187,9 @@ class HBNBCommand(cmd.Cmd):
                     elif cmd.startswith('show("') and cmd.endswith('")'):
                         instance_id = cmd[6:-2]
                         self.do_show(class_name + ' ' + instance_id)
+                    elif cmd.startswith('destroy("') and cmd.endswith('")'):
+                        instance_id = cmd[9:-2]
+                        self.do_destroy(class_name + ' ' + instance_id)
                     else:
                         print('*** Unknown syntax: %s' % line)
                 else:
