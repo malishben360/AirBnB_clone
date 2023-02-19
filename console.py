@@ -148,23 +148,43 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def emptyline(self):
-        """Prevent execution of empty line\n"""
+        """Prevent execution of empty line.\n"""
         pass
 
     def do_quit(self, line):
-        """Quit command to exit the program\n"""
+        """Quit command to exit the program.\n"""
         return True
 
     def help_quit(self):
-        print('Quit command to exit the program\n')
+        print('Quit command to exit the program.\n')
 
     def do_EOF(self, line):
-        """Quit command to exit the program\n"""
+        """Quit command to exit the program.\n"""
         return True
 
     def help_EOF(self):
-        print('Quit command to exit the program\n')
+        """Handles the ^C command to exit the program.\n"""
+        return True
 
+    def default(self, line):
+        """Retrieves all instances of a class by class name.\n"""
+        args = line.split()
+        if len(args) > 0:
+            class_cmd = args[0].split('.')
+            if len(class_cmd) > 1:
+                class_name = class_cmd[0]
+                cmd = class_cmd[1]
+                if cmd == "all()":
+                    if class_name in classes:
+                        self.do_all(class_name)
+                    else:
+                        print("*** class doesn't exist ***")
+                else:
+                    print('*** Unknown syntax: %s' % line)
+            else:
+                print('*** Unknown syntax: %s' % line)
+        else:
+            print('*** Unknown syntax: %s' % line)
 
 if __name__ == '__main__':
     """Make the program executable except when imported."""
