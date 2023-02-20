@@ -190,7 +190,7 @@ class HBNBCommand(cmd.Cmd):
                         instance_id = cmd[6:-2]
                         self.do_show(class_name + ' ' + instance_id)
                     elif cmd.startswith('update('):
-                        args = [i 
+                        args = [i
                                 for i in re.split(r'[.,")( ]', line)
                                 if i != '' and i != 'update']
                         string = ' '.join(i for i in args)
@@ -202,8 +202,7 @@ class HBNBCommand(cmd.Cmd):
                             json_obj = json.loads(json_str)
                             for key, value in json_obj.items():
                                 string = '%s %s %s %s' % (class_name,
-                                        inst_id, key, value
-                                        )
+                                                          inst_id, key, value)
                                 self.do_update(string)
                         else:
                             self.do_update(string)
@@ -218,6 +217,7 @@ class HBNBCommand(cmd.Cmd):
                 print('*** Unknown syntax: %s' % line)
         else:
             print('*** Unknown syntax: %s' % line)
+
 
 if __name__ == '__main__':
     """Make the program executable except when imported."""
